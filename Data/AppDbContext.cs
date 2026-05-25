@@ -8,6 +8,7 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<BookingModel> Destinations { get; set; }
-
     public DbSet<ReservationModel> Bookings { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+    
 }

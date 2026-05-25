@@ -15,9 +15,12 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+
 var app = builder.Build();
 
-System.Console.WriteLine("Hello World!");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
