@@ -1,0 +1,6 @@
+@TravelEase_HostAddress = http://localhost:5261
+
+GET {{TravelEase_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
