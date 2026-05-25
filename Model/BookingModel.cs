@@ -1,7 +1,10 @@
-﻿namespace TravelEase.Model
+﻿using System.ComponentModel.DataAnnotations; // 1. Add this namespace
+
+namespace TravelEase.Model
 {
     public class BookingModel
     {
+        [Key] // 2. Add this attribute
         public int BookingID { get; set; }
         public int CustomerID { get; set; }
         public int PartnerID { get; set; }

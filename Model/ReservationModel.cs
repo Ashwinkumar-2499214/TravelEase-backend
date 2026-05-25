@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations; // Add this namespace
+
 namespace TravelEase.Model
 {
     public class ReservationModel
     {
+        [Key] // Marks this as the Primary Key
         public int ReservationID { get; set; }
         public int BookingID { get; set; }
         public string? Details { get; set; }
