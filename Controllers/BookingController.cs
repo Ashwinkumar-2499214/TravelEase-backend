@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TravelEase.Service.Interface;
 using TravelEase.Service.Implementation;
 using TravelEase.Constants;
+using TravelEase.ViewModel;
 namespace TravelEase.Controllers
 {
     [Route("api/[controller]")]
@@ -23,6 +24,17 @@ namespace TravelEase.Controllers
         {
             var bookings = _bookingService.GetAllBookings();
             return Ok(bookings);
+        }
+
+        [HttpPost]
+        [Route("")]
+        public IActionResult CreateBooking([FromBody] CreateBookingRequest request)
+        {
+            if (request == null)
+                return BadRequest(Constants.Constants.BadRequestMessage);
+
+            var created = _bookingService.CreateBooking(request);
+            return CreatedAtAction(nameof(GetBooking), new { bookingId = created.BookingID }, created);
         }
 
         [HttpGet]

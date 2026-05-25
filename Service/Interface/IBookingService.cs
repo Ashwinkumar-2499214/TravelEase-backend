@@ -6,6 +6,7 @@ namespace TravelEase.Service.Interface
     {
         IEnumerable<BookingViewModel>  GetAllBookings();
         BookingViewModel GetBooking(int bookingId);
+        BookingViewModel CreateBooking(TravelEase.ViewModel.CreateBookingRequest request);
 
     }
 }
