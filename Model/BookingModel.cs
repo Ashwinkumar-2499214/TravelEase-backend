@@ -9,5 +9,7 @@
         public DateTime Date { get; set; }
         public string? Status { get; set; }
         public decimal Amount { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
     }
 }

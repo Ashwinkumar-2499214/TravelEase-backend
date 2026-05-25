@@ -1,6 +1,10 @@
-namespace TravelEase.Model
+namespace TravelEase.DTOs
 {
-    public class ReservationModel
+    /// <summary>
+    /// Response DTO for reservation operations.
+    /// Contains complete reservation details linked to a booking.
+    /// </summary>
+    public class ReservationResponse
     {
         public int ReservationID { get; set; }
         public int BookingID { get; set; }
@@ -8,7 +12,7 @@ namespace TravelEase.Model
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string? Status { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
 }

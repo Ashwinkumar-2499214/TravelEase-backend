@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TravelEase")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6a0be85289ff2e46cc7e9ddab25552b18c2f0d41")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+443e8cc5b9dc0198bb6ce3395567ce3ce58df30c")]
 [assembly: System.Reflection.AssemblyProductAttribute("TravelEase")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TravelEase")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

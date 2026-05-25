@@ -23,5 +23,26 @@ namespace TravelEase.Repository.Implementation
         {
             return _bookings;
         }
+
+        public void UpdateBooking(TravelEase.Model.BookingModel booking)
+        {
+            var existing = _bookings.FirstOrDefault(b => b.BookingID == booking.BookingID);
+            if (existing != null)
+            {
+                var index = _bookings.IndexOf(existing);
+                _bookings[index] = booking;
+            }
+        }
+
+        public bool DeleteBooking(int bookingId)
+        {
+            var booking = _bookings.FirstOrDefault(b => b.BookingID == bookingId);
+            if (booking != null)
+            {
+                _bookings.Remove(booking);
+                return true;
+            }
+            return false;
+        }
     }
 }

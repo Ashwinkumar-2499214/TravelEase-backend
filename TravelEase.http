@@ -1,6 +1,87 @@
 @TravelEase_HostAddress = http://localhost:5261
 
-GET {{TravelEase_HostAddress}}/weatherforecast/
+### ============================================================================
+### BOOKING MANAGEMENT MODULE - COMPREHENSIVE ENDPOINTS
+### ============================================================================
+
+### 1. CREATE BOOKING (POST /api/bookings)
+### Initiates a new booking/checkout with optional reservations
+POST {{TravelEase_HostAddress}}/api/bookings
+Content-Type: application/json
+
+{
+  "customerID": 101,
+  "partnerID": 5,
+  "itemType": "Flight",
+  "date": "2026-05-25T14:00:00Z",
+  "status": "Pending",
+  "amount": 299.99,
+  "reservations": [
+    {
+      "details": "Window seat 12A",
+      "startDate": "2026-07-01T10:00:00Z",
+      "endDate": "2026-07-01T18:00:00Z",
+      "status": "Active"
+    },
+    {
+      "details": "Hotel room 305",
+      "startDate": "2026-07-01T20:00:00Z",
+      "endDate": "2026-07-05T12:00:00Z",
+      "status": "Active"
+    }
+  ]
+}
+
+###
+
+### 2. GET ALL BOOKINGS (GET /api/bookings)
+### Retrieves complete list of all bookings
+GET {{TravelEase_HostAddress}}/api/bookings
 Accept: application/json
 
 ###
+
+### 3. GET BOOKING BY ID (GET /api/bookings/{bookingId})
+### Retrieves a specific booking with all associated reservations
+GET {{TravelEase_HostAddress}}/api/bookings/1
+Accept: application/json
+
+###
+
+### 4. GET BOOKING HISTORY BY CUSTOMER (GET /api/bookings/customer/{customerId})
+### Searches all bookings for a specific customer (booking history retrieval)
+GET {{TravelEase_HostAddress}}/api/bookings/customer/101
+Accept: application/json
+
+###
+
+### 5. SEARCH BOOKINGS BY STATUS (GET /api/bookings/status/{status})
+### Filters bookings by status (Pending, Confirmed, Cancelled, etc.)
+GET {{TravelEase_HostAddress}}/api/bookings/status/Pending
+Accept: application/json
+
+###
+
+### 6. MODIFY BOOKING (PUT /api/bookings/{bookingId})
+### Updates an existing booking (status, amount, etc.)
+PUT {{TravelEase_HostAddress}}/api/bookings/1
+Content-Type: application/json
+
+{
+  "customerID": 101,
+  "partnerID": 5,
+  "itemType": "Flight",
+  "date": "2026-05-25T14:00:00Z",
+  "status": "Confirmed",
+  "amount": 349.99
+}
+
+###
+
+### 7. CANCEL BOOKING (DELETE /api/bookings/{bookingId})
+### Cancels booking and all associated reservations
+DELETE {{TravelEase_HostAddress}}/api/bookings/1
+Accept: application/json
+
+###
+
