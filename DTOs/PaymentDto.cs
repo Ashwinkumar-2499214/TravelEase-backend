@@ -4,6 +4,6 @@ public class PaymentDto
     public Guid InvoiceId { get; set; }
     public decimal Amount { get; set; }
     public DateTime Date { get; set; }
-    public string Method { get; set; }
-    public string Status { get; set; }
+    public required string Method { get; set; }
+    public required string Status { get; set; }
 }

@@ -69,7 +69,9 @@ public class PaymentService : IPaymentService
             await _invoiceRepo.UpdateAsync(invoice);
         }
 
+#pragma warning disable CS8603 // Possible null reference return.
         return await GetPaymentByIdAsync(payment.PaymentId)!;
+#pragma warning restore CS8603 // Possible null reference return.
     }
 
     public async Task UpdatePaymentStatusAsync(Guid paymentId, string status)

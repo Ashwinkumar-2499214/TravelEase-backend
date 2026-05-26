@@ -4,5 +4,5 @@ public class InvoiceDto
     public Guid BookingId { get; set; }
     public decimal Amount { get; set; }
     public DateTime Date { get; set; }
-    public string Status { get; set; }
+    public required string Status { get; set; }
 }
