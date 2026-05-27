@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TravelEaseBackend.Dto;
 
 [ApiController]
 [Route("api/v1/invoices")]
@@ -6,13 +7,13 @@ public class InvoiceController : ControllerBase
 {
     private readonly IInvoiceService _invoiceService;
     public InvoiceController(IInvoiceService invoiceService) => _invoiceService = invoiceService;
-
+//Get all invoices
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] InvoiceSearchDto search)
     {
         try
         {
-            var invoices = await _invoiceService.GetAllInvoicesAsync();
+            var invoices = await _invoiceService.GetAllInvoicesAsync(search);
             return Ok(invoices);
         }
         catch (Exception ex)
@@ -20,7 +21,7 @@ public class InvoiceController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, new { error = ex.Message });
         }
     }
-
+//Create invoice
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateInvoiceRequest request)
     {
@@ -34,7 +35,7 @@ public class InvoiceController : ControllerBase
             return BadRequest(new { error = ex.Message });
         }
     }
-
+//Get invoice by ID
     [HttpGet("{invoiceId}")]
     public async Task<IActionResult> GetById(Guid invoiceId)
     {
@@ -50,20 +51,8 @@ public class InvoiceController : ControllerBase
         }
     }
 
-    [HttpPut("{invoiceId}")]
-    public async Task<IActionResult> Update(Guid invoiceId, [FromBody] InvoiceDto dto)
-    {
-        try
-        {
-            await _invoiceService.UpdateInvoiceAsync(invoiceId, dto);
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { error = ex.Message });
-        }
-    }
 
+//Delete invoice
     [HttpDelete("{invoiceId}")]
     public async Task<IActionResult> Delete(Guid invoiceId)
     {
@@ -77,7 +66,7 @@ public class InvoiceController : ControllerBase
             return BadRequest(new { error = ex.Message });
         }
     }
-
+//Update invoice status
     [HttpPatch("{invoiceId}/status")]
     public async Task<IActionResult> UpdateStatus(Guid invoiceId, [FromBody] string status)
     {

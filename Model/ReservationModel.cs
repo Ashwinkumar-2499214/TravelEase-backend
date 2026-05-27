@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations; // Add this namespace
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TravelEase.Model
 {
@@ -13,5 +14,7 @@ namespace TravelEase.Model
         public string? Status { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
+        [NotMapped]
+        public object? Destination { get; set; }
     }
 }

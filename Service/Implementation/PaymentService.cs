@@ -1,3 +1,8 @@
+using TravelEaseBackend.Dto;
+using TravelEaseBackend.Models;
+using TravelEaseBackend.Repository.Interface;
+using TravelEaseBackend.Services.Interface;
+
 public class PaymentService : IPaymentService
 {
     private readonly IPaymentRepository _paymentRepo;
@@ -9,8 +14,33 @@ public class PaymentService : IPaymentService
         _invoiceRepo = invoiceRepo;
     }
 
-    public async Task<IEnumerable<PaymentDto>> GetAllPaymentsAsync() =>
-        (await _paymentRepo.GetAllAsync()).Select(p => new PaymentDto
+    public async Task<IEnumerable<PaymentDto>> GetAllPaymentsAsync(PaymentSearchDto search)
+    {
+        var payments = (await _paymentRepo.GetAllAsync()).AsEnumerable();
+
+        // Filter by status if provided
+        if (!string.IsNullOrWhiteSpace(search.Status))
+        {
+            payments = payments.Where(p => p.Status.ToString().Equals(search.Status, StringComparison.OrdinalIgnoreCase));
+        }
+
+        // Filter by date range if provided
+        if (search.FromDate.HasValue)
+        {
+            payments = payments.Where(p => p.Date >= search.FromDate.Value);
+        }
+        if (search.ToDate.HasValue)
+        {
+            payments = payments.Where(p => p.Date <= search.ToDate.Value);
+        }
+
+        // Filter by method if provided
+        if (!string.IsNullOrWhiteSpace(search.Method))
+        {
+            payments = payments.Where(p => p.Method.ToString().Equals(search.Method, StringComparison.OrdinalIgnoreCase));
+        }
+
+        return payments.Select(p => new PaymentDto
         {
             PaymentId = p.PaymentId,
             InvoiceId = p.InvoiceId,
@@ -19,6 +49,7 @@ public class PaymentService : IPaymentService
             Method = p.Method.ToString(),
             Status = p.Status.ToString()
         });
+    }
 
     public async Task<IEnumerable<PaymentDto>> GetPaymentsByInvoiceIdAsync(Guid invoiceId) =>
         (await _paymentRepo.GetByInvoiceIdAsync(invoiceId)).Select(p => new PaymentDto
@@ -105,5 +136,44 @@ public class PaymentService : IPaymentService
 
         invoice.Amount += adjustmentAmount;
         await _invoiceRepo.UpdateAsync(invoice);
+    }
+
+    public async Task<IEnumerable<PaymentDto>> SearchPaymentsAsync(PaymentSearchDto searchCriteria)
+    {
+        var allPayments = await _paymentRepo.GetAllAsync();
+        var query = allPayments.AsEnumerable();
+
+        // Filter by status
+        if (!string.IsNullOrWhiteSpace(searchCriteria.Status))
+        {
+            query = query.Where(p => p.Status.ToString().Equals(searchCriteria.Status, StringComparison.OrdinalIgnoreCase));
+        }
+
+        // Filter by date range
+        if (searchCriteria.FromDate.HasValue)
+        {
+            query = query.Where(p => p.Date >= searchCriteria.FromDate.Value);
+        }
+
+        if (searchCriteria.ToDate.HasValue)
+        {
+            query = query.Where(p => p.Date <= searchCriteria.ToDate.Value);
+        }
+
+        // Filter by method
+        if (!string.IsNullOrWhiteSpace(searchCriteria.Method))
+        {
+            query = query.Where(p => p.Method.ToString().Equals(searchCriteria.Method, StringComparison.OrdinalIgnoreCase));
+        }
+
+        return query.Select(p => new PaymentDto
+        {
+            PaymentId = p.PaymentId,
+            InvoiceId = p.InvoiceId,
+            Amount = p.Amount,
+            Date = p.Date,
+            Method = p.Method.ToString(),
+            Status = p.Status.ToString()
+        });
     }
 }

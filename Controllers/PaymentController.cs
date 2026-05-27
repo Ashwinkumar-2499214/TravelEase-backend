@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TravelEaseBackend.Dto;
 
 [ApiController]
 [Route("api/v1/payments")]
@@ -7,12 +8,13 @@ public class PaymentController : ControllerBase
     private readonly IPaymentService _paymentService;
     public PaymentController(IPaymentService paymentService) => _paymentService = paymentService;
 
+    //Get all payments
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] PaymentSearchDto search)
     {
         try
         {
-            var payments = await _paymentService.GetAllPaymentsAsync();
+            var payments = await _paymentService.GetAllPaymentsAsync(search);
             return Ok(payments);
         }
         catch (Exception ex)
@@ -21,6 +23,7 @@ public class PaymentController : ControllerBase
         }
     }
 
+    // Get Payment by ID
     [HttpGet("{paymentId}")]
     public async Task<IActionResult> GetById(Guid paymentId)
     {
@@ -36,6 +39,7 @@ public class PaymentController : ControllerBase
         }
     }
 
+    //Get payments by invoice
     [HttpGet("/api/v1/invoices/{invoiceId}/payments")]
     public async Task<IActionResult> GetByInvoice(Guid invoiceId)
     {
@@ -50,6 +54,7 @@ public class PaymentController : ControllerBase
         }
     }
 
+    //Create payment for invoice
     [HttpPost("/api/v1/invoices/{invoiceId}/payments")]
     public async Task<IActionResult> Create(Guid invoiceId, [FromBody] CreatePaymentRequest request)
     {
@@ -64,6 +69,7 @@ public class PaymentController : ControllerBase
         }
     }
 
+    //Update payment status
     [HttpPatch("{paymentId}/status")]
     public async Task<IActionResult> UpdateStatus(Guid paymentId, [FromBody] string status)
     {
@@ -78,6 +84,7 @@ public class PaymentController : ControllerBase
         }
     }
 
+    //Refund a payment
     [HttpPost("{paymentId}/refund")]
     public async Task<IActionResult> Refund(Guid paymentId)
     {
@@ -85,20 +92,6 @@ public class PaymentController : ControllerBase
         {
             await _paymentService.RefundPaymentAsync(paymentId);
             return Ok(new { message = "Refund processed successfully" });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { error = ex.Message });
-        }
-    }
-
-    [HttpPost("/api/v1/invoices/{invoiceId}/adjustments")]
-    public async Task<IActionResult> Adjust(Guid invoiceId, [FromBody] decimal adjustmentAmount)
-    {
-        try
-        {
-            await _paymentService.ApplyAdjustmentAsync(invoiceId, adjustmentAmount);
-            return Ok(new { message = "Adjustment applied successfully" });
         }
         catch (Exception ex)
         {

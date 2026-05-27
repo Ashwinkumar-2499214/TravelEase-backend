@@ -1,4 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using TravelEaseBackend.Repository.Implementation;
+using TravelEaseBackend.Repository.Interface;
+using TravelEaseBackend.Services.Implementation;
+using TravelEaseBackend.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,13 +39,21 @@ builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 
+// Register repositories
+builder.Services.AddScoped<IKpiReportRepository, KpiReportRepository>();
+
+// Register services
+builder.Services.AddScoped<IKpiReportService, KpiReportService>();
+
 var app = builder.Build();
+
 
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    
+   app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();

@@ -1,10 +1,33 @@
+using TravelEaseBackend.Dto;
+using TravelEaseBackend.Models;
+using TravelEaseBackend.Repository.Interface;
+using System.Linq;
+
 public class InvoiceService : IInvoiceService
 {
     private readonly IInvoiceRepository _invoiceRepo;
     public InvoiceService(IInvoiceRepository invoiceRepo) => _invoiceRepo = invoiceRepo;
 
-    public async Task<IEnumerable<InvoiceDto>> GetAllInvoicesAsync() =>
-        (await _invoiceRepo.GetAllAsync()).Select(i => new InvoiceDto
+    public async Task<IEnumerable<InvoiceDto>> GetAllInvoicesAsync(InvoiceSearchDto search)
+    {
+        var invoices = (await _invoiceRepo.GetAllAsync()).AsEnumerable();
+
+        if (!string.IsNullOrWhiteSpace(search?.Status))
+        {
+            invoices = invoices.Where(i => i.Status.ToString().Equals(search.Status, StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (search?.FromDate.HasValue == true)
+        {
+            invoices = invoices.Where(i => i.Date >= search.FromDate.Value);
+        }
+
+        if (search?.ToDate.HasValue == true)
+        {
+            invoices = invoices.Where(i => i.Date <= search.ToDate.Value);
+        }
+
+        return invoices.Select(i => new InvoiceDto
         {
             InvoiceId = i.InvoiceId,
             BookingId = i.BookingId,
@@ -12,6 +35,7 @@ public class InvoiceService : IInvoiceService
             Date = i.Date,
             Status = i.Status.ToString()
         });
+    }
 
     public async Task<InvoiceDto?> GetInvoiceByIdAsync(Guid invoiceId)
     {
